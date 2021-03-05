@@ -48,6 +48,7 @@ private:
     void    ecCalibration(byte mode); // calibration process, wirte key parameters to EEPROM
     byte    cmdParse(const char* cmd);
     byte    cmdParse();
+    void emptyCmdReceivedBuffer();
 };
 
 #endif

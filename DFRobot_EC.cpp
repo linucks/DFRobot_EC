@@ -103,11 +103,6 @@ boolean DFRobot_EC::cmdSerialDataAvailable()
     static unsigned long cmdReceivedTimeOut = millis();
     while (Serial.available()>0) 
     {
-        if(millis() - cmdReceivedTimeOut > 500U){
-            this->_cmdReceivedBufferIndex = 0;
-            memset(this->_cmdReceivedBuffer,0,(ReceivedBufferLength));
-        }
-        cmdReceivedTimeOut = millis();
         cmdReceivedChar = Serial.read();
         if(cmdReceivedChar == '\n' || this->_cmdReceivedBufferIndex==ReceivedBufferLength-1){
             this->_cmdReceivedBufferIndex = 0;
@@ -131,6 +126,7 @@ byte DFRobot_EC::cmdParse(const char* cmd)
     }else if(strstr(cmd, "CALEC")  != NULL){
         modeIndex = 2;
     }
+    emptyCmdReceivedBuffer();
     return modeIndex;
 }
 
@@ -143,7 +139,14 @@ byte DFRobot_EC::cmdParse()
         modeIndex = 3;
     else if(strstr(this->_cmdReceivedBuffer, "CALEC")  != NULL)
         modeIndex = 2;
+    emptyCmdReceivedBuffer();
     return modeIndex;
+}
+
+void DFRobot_EC::emptyCmdReceivedBuffer()
+{
+  this->_cmdReceivedBufferIndex = 0;
+  memset(this->_cmdReceivedBuffer,0,(ReceivedBufferLength));
 }
 
 void DFRobot_EC::ecCalibration(byte mode)
