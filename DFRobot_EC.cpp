@@ -104,7 +104,7 @@ boolean DFRobot_EC::cmdSerialDataAvailable()
     while (Serial.available()>0) 
     {
         cmdReceivedChar = Serial.read();
-        if(cmdReceivedChar == '\n' || this->_cmdReceivedBufferIndex==ReceivedBufferLength-1){
+        if(cmdReceivedChar == '\n' || cmdReceivedChar == '\r' || this->_cmdReceivedBufferIndex==ReceivedBufferLength-1){
             this->_cmdReceivedBufferIndex = 0;
             strupr(this->_cmdReceivedBuffer);
             return true;
